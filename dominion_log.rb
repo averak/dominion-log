@@ -1,6 +1,26 @@
 #! /usr/bin/env ruby
 # frozen_string_literal: true
 
+class Array
+  def remove(r, reverse: false)
+    r = r.dup
+    a = dup
+    b = []
+
+    a.reverse! if reverse
+    a.each do |item|
+      i = r.find_index item
+      if i
+        r.delete_at i
+      else
+        b << item
+      end
+    end
+    b.reverse! if reverse
+    b
+  end
+end
+
 def player
   raise ArgumentError if ARGV == []
 
@@ -23,6 +43,13 @@ def extract_cards(msg)
 end
 
 def display_result(cards)
+  if cards == []
+    puts '何もありません'
+    return
+  end
+
+  puts format('全%d枚%d種', cards.length, cards.uniq.length)
+
   cards_num = {}
   max_len = 0
 
@@ -37,7 +64,7 @@ def display_result(cards)
 
   cards_num.each do |card|
     card[0] += '　' while card[0].length < max_len
-    puts format('%s：%d枚', *card)
+    puts format(' - %s：%d枚', *card)
   end
 end
 
@@ -67,8 +94,12 @@ commads.each do |msg|
     my_cards.push(*extract_cards(msg))
   elsif msg.include?('廃棄')
     my_cards = delete_card(my_cards, extract_cards(msg))
-  elsif msg.include?('引いた')
+  elsif msg.include?('引いた') || msg.include?('捨て札')
     deck = delete_card(deck, extract_cards(msg))
+  elsif msg.include?('山札を捨て札置き場に置いた')
+    deck = []
+  elsif msg.include?('山札の上に置いた')
+    deck.push(*extract_cards(msg))
   end
 
   my_cards.sort!
@@ -76,5 +107,11 @@ commads.each do |msg|
   deck = my_cards.clone if msg.include?('山札をシャッフルした')
 end
 
-p deck
+puts '▼ デッキ内容'
 display_result my_cards
+puts
+puts '▼ 山札'
+display_result deck
+puts
+puts '▼ 捨て札'
+display_result my_cards.remove deck
