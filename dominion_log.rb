@@ -41,23 +41,40 @@ def display_result(cards)
   end
 end
 
+def delete_card(all_cards, _delete_cards)
+  _delete_cards.each do |card|
+    index = all_cards.index card
+    if index.nil?
+      next
+    else
+      all_cards.delete_at all_cards.index card
+    end
+  end
+
+  all_cards
+end
+
 player_name = player
 log_text = `pbpaste`
 commads = log_text.scan(/^#{player_name}は.+/)
 
 my_cards = []
+deck = []
 commads.each do |msg|
   msg.gsub! /#{player_name}は/, ''
 
   if msg.include?('獲得') || msg.include?('受け取')
     my_cards.push(*extract_cards(msg))
   elsif msg.include?('廃棄')
-    extract_cards(msg).each do |card|
-      my_cards.delete_at my_cards.index card
-    end
+    my_cards = delete_card(my_cards, extract_cards(msg))
+  elsif msg.include?('引いた')
+    deck = delete_card(deck, extract_cards(msg))
   end
 
   my_cards.sort!
+
+  deck = my_cards.clone if msg.include?('山札をシャッフルした')
 end
 
+p deck
 display_result my_cards
