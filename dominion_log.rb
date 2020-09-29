@@ -7,9 +7,9 @@ def player
   ARGV[0]
 end
 
-def extract_cards msg
+def extract_cards(msg)
   result = []
-  msg.gsub(/を.+/, '').split("、").each do |card|
+  msg.gsub(/を.+/, '').split('、').each do |card|
     if /\d+枚/ =~ card
       num = card.match(/\d+枚/).to_s.to_i
       card = card.match(/[^\d]+/).to_s
@@ -20,6 +20,25 @@ def extract_cards msg
   end
 
   result
+end
+
+def display_result(cards)
+  cards_num = {}
+  max_len = 0
+
+  cards.each do |card|
+    max_len = card.length if card.length > max_len
+    if cards_num.key? card
+      cards_num[card] += 1
+    else
+      cards_num[card] = 1
+    end
+  end
+
+  cards_num.each do |card|
+    card[0] += '　' while card[0].length < max_len
+    puts format('%s：%d枚', *card)
+  end
 end
 
 player_name = player
@@ -38,5 +57,7 @@ commads.each do |msg|
     end
   end
 
-  p my_cards
+  my_cards.sort!
 end
+
+display_result my_cards
