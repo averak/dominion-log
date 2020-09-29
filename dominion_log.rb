@@ -87,6 +87,7 @@ commads = log_text.scan(/^#{player_name}は.+/)
 
 my_cards = []
 deck = []
+hand = []
 commads.each do |msg|
   msg.gsub! /#{player_name}は/, ''
 
@@ -94,7 +95,10 @@ commads.each do |msg|
     my_cards.push(*extract_cards(msg))
   elsif msg.include?('廃棄')
     my_cards = delete_card(my_cards, extract_cards(msg))
-  elsif msg.include?('引いた') || msg.include?('捨て札')
+  elsif msg.include?('引いた')
+    deck = delete_card(deck, extract_cards(msg))
+    hand = extract_cards(msg)
+  elsif msg.include?('捨て札')
     deck = delete_card(deck, extract_cards(msg))
   elsif msg.include?('山札を捨て札置き場に置いた')
     deck = []
@@ -110,8 +114,12 @@ end
 puts '▼ デッキ内容'
 display_result my_cards
 puts
+puts '▼ 手札'
+display_result hand
+puts
 puts '▼ 山札'
 display_result deck
 puts
 puts '▼ 捨て札'
-display_result my_cards.remove deck
+display_result my_cards.remove(deck).remove(hand)
+
