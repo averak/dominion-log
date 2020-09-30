@@ -68,19 +68,6 @@ def display_result(cards)
   end
 end
 
-def delete_card(all_cards, _delete_cards)
-  _delete_cards.each do |card|
-    index = all_cards.index card
-    if index.nil?
-      next
-    else
-      all_cards.delete_at all_cards.index card
-    end
-  end
-
-  all_cards
-end
-
 player_name = player
 log_text = `pbpaste`
 commads = log_text.scan(/^#{player_name}は.+/)
@@ -94,12 +81,15 @@ commads.each do |msg|
   if msg.include?('獲得') || msg.include?('受け取')
     my_cards.push(*extract_cards(msg))
   elsif msg.include?('廃棄')
-    my_cards = delete_card(my_cards, extract_cards(msg))
+    my_cards = my_cards.remove extract_cards(msg)
   elsif msg.include?('引いた')
-    deck = delete_card(deck, extract_cards(msg))
+    deck = deck.remove extract_cards(msg)
     hand = extract_cards(msg)
+  elsif msg.include?('的中')
+    deck = deck.remove extract_cards(msg)
+    hand << extract_cards(msg)
   elsif msg.include?('捨て札')
-    deck = delete_card(deck, extract_cards(msg))
+    deck = deck.remove extract_cards(msg)
   elsif msg.include?('山札を捨て札置き場に置いた')
     deck = []
   elsif msg.include?('山札の上に置いた')
