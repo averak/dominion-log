@@ -94,6 +94,8 @@ commads.each_with_index do |msg, i|
     deck = deck.remove extract_cards(msg)
   elsif msg.include?('山札の上に置いた')
     deck.push(*extract_cards(msg))
+  elsif msg.include?('島マット')
+    my_cards = my_cards.remove [extract_cards(msg), '島']
   end
 
   my_cards.sort!
