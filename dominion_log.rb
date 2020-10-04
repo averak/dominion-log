@@ -75,7 +75,7 @@ commads = log_text.scan(/^#{player_name}は.+/)
 my_cards = []
 deck = []
 hand = []
-commads.each do |msg|
+commads.each_with_index do |msg, i|
   msg.gsub! /#{player_name}は/, ''
 
   if msg.include?('獲得') || msg.include?('受け取')
@@ -98,7 +98,11 @@ commads.each do |msg|
 
   my_cards.sort!
 
-  deck = my_cards.clone if msg.include?('山札をシャッフルした')
+  next unless msg.include?('山札をシャッフルした')
+
+  if i < commads.length - 1
+    deck = my_cards.clone if commads[i].include?('引いた')
+  end
 end
 
 puts '▼ デッキ内容'
@@ -112,4 +116,3 @@ display_result deck
 puts
 puts '▼ 捨て札'
 display_result my_cards.remove(deck).remove(hand)
-
