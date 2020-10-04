@@ -101,7 +101,7 @@ commads.each_with_index do |msg, i|
   next unless msg.include?('山札をシャッフルした')
 
   if i < commads.length - 1
-    deck = my_cards.clone if commads[i].include?('引いた')
+    deck = my_cards.clone if commads[i+1].include?('引いた')
   end
 end
 
