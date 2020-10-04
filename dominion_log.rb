@@ -88,10 +88,10 @@ commads.each_with_index do |msg, i|
   elsif msg.include?('的中')
     deck = deck.remove extract_cards(msg)
     hand << extract_cards(msg)
-  elsif msg.include?('捨て札')
-    deck = deck.remove extract_cards(msg)
   elsif msg.include?('山札を捨て札置き場に置いた')
     deck = []
+  elsif msg.include?('捨て札')
+    deck = deck.remove extract_cards(msg)
   elsif msg.include?('山札の上に置いた')
     deck.push(*extract_cards(msg))
   end
