@@ -80,7 +80,7 @@ commads.each_with_index do |msg, i|
 
   if msg.include?('獲得') || msg.include?('受け取')
     my_cards.push(*extract_cards(msg))
-  elsif msg.include?('廃棄')
+  elsif msg.include?('廃棄') || msg.include?('山に戻した')
     my_cards = my_cards.remove extract_cards(msg)
   elsif msg.include?('引いた')
     deck = deck.remove extract_cards(msg)
