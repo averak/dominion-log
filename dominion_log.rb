@@ -24,7 +24,7 @@ end
 def player
   raise ArgumentError if ARGV == []
 
-  ARGV[0][0]
+  ARGV[0][0].downcase
 end
 
 def extract_cards(msg)
