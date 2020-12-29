@@ -1,4 +1,4 @@
-# Dominion Log
+# Dominion Salvager
 
 [dominion](https://dominion.games/)のログからデッキを算出
 
