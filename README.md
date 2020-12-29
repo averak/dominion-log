@@ -17,5 +17,5 @@ $ cd <this repo>
 ## Usage
 ```sh
 # ログをコピーした状態で
-$ ./dominion_log.rb player_name
+$ ./salvager <player_name>
 ```
