@@ -76,7 +76,7 @@ my_cards = []
 deck = []
 hand = []
 commads.each_with_index do |msg, i|
-  msg.gsub! /#{player_name}は/, ''
+  msg.gsub!(/#{player_name}は/, '')
 
   if msg.include?('獲得') || msg.include?('受け取')
     my_cards.push(*extract_cards(msg))
@@ -102,9 +102,7 @@ commads.each_with_index do |msg, i|
 
   next unless msg.include?('山札をシャッフルした')
 
-  if i < commads.length - 1
-    deck = my_cards.clone if commads[i+1].include?('引いた')
-  end
+  deck = my_cards.clone if i < commads.length - 1 && commads[i + 1].include?('引いた')
 end
 
 puts '▼ デッキ内容'
